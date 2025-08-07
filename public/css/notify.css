@@ -1,0 +1,139 @@
+.notify-container {
+    position: fixed;
+    pointer-events: none;
+    display: flex;
+    width: var(--notify-container-width);
+    height: var(--notify-container-height);
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 999;
+
+    &.top-left {
+        top: 10px;
+        left: 10px;
+        flex-direction: column;
+    }
+    &.top-center {
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: column;
+    }
+    &.top-right {
+        top: 10px;
+        right: 10px;
+        flex-direction: column;
+    }
+    &.bottom-left {
+        bottom: 10px;
+        left: 10px;
+        flex-direction: column-reverse;
+        
+    }
+    &.bottom-center {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: column-reverse;
+    }
+    &.bottom-right {
+        bottom: 10px;
+        right: 10px;
+        flex-direction: column-reverse;
+    }
+
+    .notify {
+        width: var(--notify-width);
+        height: var(--notify-height);
+        background-color: var(--base-white);
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: auto;
+        border-radius: var(--notify-border-radius);
+        border: 1px solid var(--base-gray-200);
+        margin: var(--notify-margin);
+
+        &.notify-remove {
+            animation: notify-remove var(--notify-animation-duration) ease forwards;
+        }
+
+        &.notify-show {
+            animation: notify-show var(--notify-animation-duration) ease forwards;
+        }
+
+        &:hover {
+            background-color: var(--base-gray-200);
+        }
+
+        &::after { 
+            /* set as progress bar */
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            left: calc(var(--notify-border-radius) / 2);
+            width: calc(100% - var(--notify-border-radius));
+            height: 1px;
+            background-color: var(--progress-color);
+            transition: all var(--notify-duration) linear;
+            transform: scale(var(--progress-scale),1);
+            transform-origin: var(--progress-transform-origin);
+        }
+
+        .notify-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: var(--notify-height);
+            height: var(--notify-height);
+            min-width: 30px;
+            min-height: 30px;
+            margin: 0 5px;
+            i {
+                min-width: var(--notify-icon-size);
+                width: var(--notify-icon-size);
+                min-height: var(--notify-icon-size);
+                height: var(--notify-icon-size);
+                font-size: var(--notify-icon-size);
+                object-fit: contain;
+            }
+        }
+
+        .notify-content {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+
+            .notify-message {
+                display: flex;
+                font-size: var(--notify-font-size);
+                color: var(--base-black);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-right: var(--notify-message-margin-right);
+                
+            }
+        }
+    }
+}
+
+@keyframes notify-remove {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+   
+}
+
+@keyframes notify-show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+   
+}

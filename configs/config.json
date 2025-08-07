@@ -1,0 +1,96 @@
+{
+    "server_config": {
+        "host": "0.0.0.0",
+        "port": 80,
+        "tls_config": {
+            "enabled": false,
+            "cert_file": "fullchain.crt",
+            "key_file": "private.key"
+        },
+        "url_origin": "http://localhost",
+        "//":"extra_headers is used to add extra headers to the response, like X-Powered-By",
+        "extra_headers": {
+            "X-Powered-By": "LiteBlog"
+        }
+    },
+    "access_config": {
+        "//": "random_key means the token_encrypt_key will be random generated on each start up, if false, it will use the access_token and backend_path to generate the token_encrypt_key.",
+        "enable_backend": true,
+        "random_key": true,
+        "backend_path": "yourbackendPath",
+        "access_token": "yourAccessToken"
+    },
+    "cache_config": {
+        "//": "this used to cache the rendered pages, default is in memory,if use_disk is true, it will cache in disk and using.",
+        "use_disk": false,
+        "max_cache_size": 2147483648,
+        "max_cache_items": 1000000,
+        "expire_time": 3600
+    },
+    "deliver_config": {
+        "//": "this used to using deliver to avoid cache caused delay",
+        "buffer": 1024,
+        "threads": 2
+    },
+    "backup_config": {
+        "//": "this used to backup the blog data, default is disabled, if enabled is true, it will backup the blog data every backup_interval minutes, and keep max_backups backups, and delete the backups that are older than max_backups_suvival_time miniutes.",
+        "enabled": false,
+        "backup_dir": "backups",
+        "backup_interval": 3600,
+        "max_backups": 10,
+        "max_backups_survival_time": 86400
+    },
+    "comment_config": {
+        "//": "types:cloudflare_turnstile|google_recaptcha",
+        "enabled": false,
+        "type": "cloudflare_turnstile",
+        "cf_secret_key": "your_secret_key",
+        "cf_site_key": "your_site_key",
+        "google_site_key": "your_site_key",
+        "google_secret_key": "your_secret_key",
+        "min_seconds_between_comments": 30,
+        "max_text_length": 1000
+    },
+    "logger_config": {
+        "//": "0: debug/all 1: info 2: warning 3: error 4: critical; file_sync_interval: the interval to sync the log file to disk, default is 10 seconds; disable_stdout: disable the output to stdout, default is false.max_log_file_size: the max size of the log file, default is 512MB.",
+        "level": 1,
+        "log_file": "liteblog.log",
+        "file_sync_interval": 10,
+        "max_log_file_size": 536870912,
+        "disable_stdout": false
+    },
+    "contentAdvisor_config": {
+        "//": "This is the content advisor config, if enabled is true, it will use content advisor to filter the comments and articles, and cards, means it will avoid possible spam(like XSS) in content.",
+        "enabled": true,
+        "filter_comment": true,
+        "filter_article": false,
+        "filter_card": true
+    },
+    "notify_config": {
+        "//": "this is the notify config, if enabled is true, it will send the notification to the receiver.Available types: smtp|telegrambot,available triggers: receive_comment|subscribed_comment_reply",
+        "enabled": false,
+        "type": "telegrambot",
+        "trigger": [
+            "receive_comment",
+            "subscribed_comment_reply"
+        ],
+        "smtp_config": {
+            "host": "smtp.gmail.com:587",
+            "username": "your_username",
+            "password": "your_password",
+            "from_addr": "your_email",
+            "to_addrs": ["receiver1_email", "receiver2_email"]
+        },
+        "telegrambot_config": {
+            "token": "yourbot_token",
+            "chat_id": "your_chat_id"
+        }
+    },
+    "plugins_config": {
+        "enabled": false
+    },
+    "sniffer_config": {
+        "enabled": true,
+        "public_provider": "/sniffer"
+    }
+}

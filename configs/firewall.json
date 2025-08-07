@@ -1,0 +1,16 @@
+{
+    "rules": [
+        {
+            "name": "default_rate_limit",
+            "action": 1,
+            "rule": "200",
+            "type": "ratelimit",
+            "timeout": 9999999999,
+            "reason": "you have exceeded the rate limit",
+            "args": [
+                "block_time=60",
+                "cycle=10"
+            ]
+        }
+    ]
+}

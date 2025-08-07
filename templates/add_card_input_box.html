@@ -1,0 +1,73 @@
+<div class="card-input-box">
+    <div class="box-drag-handle"></div>
+    <div class="input-group">
+        <label for="add-card-title">Title</label>
+        <input type="text" id="add-card-title" required>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-description">Description</label>
+        <textarea id="add-card-description" rows="3" required></textarea>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-link">Link</label>
+        <input type="text" id="add-card-link" value="https://your.com/link" required>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-image">Image</label>
+        <input type="text" id="add-card-image" value="https://your.com/image.jpg" required>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-template">Template</label>
+        <select id="add-card-template" required>
+            <option value="card_template_classical">Classical card</option>
+            <option value="card_template_split_line">Class split line</option>
+        </select>
+    </div>
+
+    <!-- when choose class split line -->
+    <div class="input-group" id="split-line-input-group" style="display: none;">
+        <label for="add-card-class-icon">Icon</label>
+        <select id="add-card-class-icon">
+            <option value="fa-gamepad">Game</option>
+            <option value="fa-book">Book</option>
+            <option value="fa-music">Music</option>
+            <option value="fa-film">Film</option>
+            <option value="fa-camera">Camera</option>
+            <option value="fa-headphones">Headphones</option>
+            <option value="fa-user">User</option>
+            <option value="fa-heart">Heart</option>
+            <option value="fa-star">Star</option>
+            <option value="fa-flag">Flag</option>
+        </select>
+    </div>
+    <!-- end if -->
+
+    <div class="input-group">
+        <label for="add-card-order">Order</label>
+        <input type="number" id="add-card-order" value="1" required>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-detailed-title">Detailed title</label>
+        <input type="text" id="add-card-detailed-title" required>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-detailed-description">Detailed description</label>
+        <textarea id="add-card-detailed-description" rows="3" required></textarea>
+    </div>
+
+    <div class="input-group">
+        <label for="add-card-detailed-image">Detailed Image</label>
+        <input type="text" id="add-card-detailed-image" value="https://your.com/image.jpg" required>
+    </div>
+
+    <div class="button-group">
+        <button type="button" class="add-card-button" onclick="OnAddCardButtonClick()">Add Card</button>
+        <button type="button" class="cancel-button" onclick="CancelInputBox()">Cancel</button>
+    </div>
+</div>
