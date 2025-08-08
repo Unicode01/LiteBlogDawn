@@ -3,7 +3,15 @@ this.liteblogApis = {
         this.backendPath = path;
         this.accessToken = accessToken;
     },
+    setBackendLoginToken: function (path, loginToken, expire_time) {
+        this.backendPath = path;
+        this.loginToken = loginToken;
+        this.loginTokenExpireTime = parseInt(expire_time);
+    },
     getConfusedToken: function () {
+        if (this.loginToken && this.loginTokenExpireTime > (new Date().getTime()/1000)) {
+            return this.loginToken;
+        }
         class Xorshift32 {
             constructor(seed) {
                 if (seed === 0) throw new Error("Seed cannot be zero");
@@ -386,6 +394,30 @@ this.liteblogApis = {
                 }
             })
             .then(data => success(data))
+            .catch(e => error(e));
+    },
+    // other class
+    login: function (success, error) {
+        fetch("/" + this.backendPath + "/login", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                access_token: this.getConfusedToken(),
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+            })
+            .then(data => {
+                this.setBackendLoginToken(this.backendPath, data.token, data.timeout);
+                success(data);
+            })
             .catch(e => error(e));
     },
     // public class

@@ -64,7 +64,6 @@ function addEventListeners() {
     addSidebarListeners();
     addFillSidebarListener();
 
-
 }
 
 function enterEdit() {

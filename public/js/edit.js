@@ -1,5 +1,6 @@
 
 const template_new_post = `{{file:template_new_post}}`
+const template_new_post_direct = `{{file:template_new_post_direct}}`
 const index_edit_card_overlay = `
 <div class="edit-overlay">
 <div class="edit-overlag-button" id="move-up-card-button"><i class="fa fa-caret-up"></i></div>
@@ -102,10 +103,12 @@ function addInputBoxSelectEventListeners() {
             case "card_template_classical":
                 // hide split line fields
                 inputbox.querySelector("#split-line-input-group").style.display = "none";
+                inputbox.querySelector("#classical-card-input-group").style.display = "";
                 break;
             case "card_template_split_line":
                 // show split line fields
-                inputbox.querySelector("#split-line-input-group").style.display = "block";
+                inputbox.querySelector("#split-line-input-group").style.display = "";
+                inputbox.querySelector("#classical-card-input-group").style.display = "none";
                 break;
         }
     });
@@ -127,12 +130,27 @@ function addCard() {
 }
 
 function deleteCard(card) {
-    cardId = card.getAttribute("card-id");
+    const cardId = card.getAttribute("card-id");
     console.log("deleteCard", cardId);
     if (!confirm("Are you sure you want to delete this card?")) return;
+    deleteArticle = false;
+    if (card.classList.contains("card-classical")) {
+        deleteArticle = confirm("Do you want to delete the whole article as well?");
+    }
+    if (deleteArticle) {
+        // get card article id
+        articleId = card.querySelector(".card-classical-link").getAttribute("href").split("/")[2];
+        liteblogApis.deleteArticle(articleId, function (data) {
+            console.log(data);
+            window.Ntf.success("Article deleted.");
+        }, function (data) {
+            console.log(data);
+        });
+    }
     liteblogApis.deleteCard(cardId, success = function (data) {
         console.log(data);
         card.parentNode.removeChild(card);
+        window.Ntf.success("Card deleted.");
     }, error = function (data) {
         console.log(data);
     })
@@ -185,6 +203,7 @@ function OnAddCardButtonClick() {
     const link = document.querySelector("#add-card-link").value;
     const image = document.querySelector("#add-card-image").value;
     const template = document.querySelector("#add-card-template").value;
+    const redirect_type = document.querySelector("#add-card-redirect-type").value;
     const order = document.querySelector("#add-card-order").value;
     const icon = document.querySelector("#add-card-class-icon").value;
     const detailed_title = document.querySelector("#add-card-detailed-title").value == "" ? title : document.querySelector("#add-card-detailed-title").value;
@@ -194,7 +213,7 @@ function OnAddCardButtonClick() {
     if (mode == "add") {
         // add new post
         // build post
-        const new_post_html = buildArticle(detailed_title, detailed_description, detailed_image, link);
+        const new_post_html = buildArticle(redirect_type, detailed_title, detailed_description, detailed_image, link);
         console.log(new_post_html);
         // send request to server
         var article_id = "";
@@ -296,15 +315,30 @@ function OnAddCardButtonClick() {
     }
 }
 
-function buildArticle(title, desc, img, link) {
-    domparser = new DOMParser();
-    new_post = domparser.parseFromString(template_new_post, "text/html").body.firstChild;
-    new_post.querySelector("#post-title") ? new_post.querySelector("#post-title").textContent = title : null;
-    new_post.querySelector("#post-description") ? new_post.querySelector("#post-description").textContent = desc : null;
-    new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("src", img) : null;
-    new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
-    new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
-    return new_post.outerHTML;
+function buildArticle(type, title, desc, img, link) {
+    switch (type) {
+        case "proxy":
+            domparser = new DOMParser();
+            new_post = domparser.parseFromString(template_new_post, "text/html").body.firstChild;
+            new_post.querySelector("#post-title") ? new_post.querySelector("#post-title").textContent = title : null;
+            new_post.querySelector("#post-description") ? new_post.querySelector("#post-description").textContent = desc : null;
+            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("src", img) : null;
+            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
+            new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
+            return new_post.outerHTML;
+        case "direct":
+            domparser = new DOMParser();
+            new_post = domparser.parseFromString(template_new_post_direct, "text/html").body.firstChild;
+            new_post.querySelector("#post-title") ? new_post.querySelector("#post-title").textContent = title : null;
+            new_post.querySelector("#post-description") ? new_post.querySelector("#post-description").textContent = desc : null;
+            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("src", img) : null;
+            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
+            new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
+            return new_post.outerHTML;
+        default:
+            return "";
+    }
+
 }
 
 function SwitchTheme() {
@@ -344,9 +378,19 @@ function CancelInputBox() {
 }
 
 function askForAccess() {
-    if (localStorage.getItem("accessPath") && localStorage.getItem("accessKey")) {
-        liteblogApis.setBackendPathAndAccessToken(localStorage.getItem("accessPath"), localStorage.getItem("accessKey"));
-        return true;
+    thisServerIdentify = "{{rendered:token_encrypt_key}}"
+    if (localStorage.getItem("accessPath") && localStorage.getItem("loginToken") && localStorage.getItem("loginTokenExpireTime") && localStorage.getItem("loginServerIdentify")) {
+        path = localStorage.getItem("accessPath");
+        loginToken = localStorage.getItem("loginToken");
+        loginTokenExpireTime = localStorage.getItem("loginTokenExpireTime");
+        serverIdentify = localStorage.getItem("loginServerIdentify");
+
+        if (loginToken && parseInt(loginTokenExpireTime) > new Date().getTime()/1000 && thisServerIdentify === serverIdentify) { // check if login token expired
+            liteblogApis.setBackendLoginToken(path, loginToken, loginTokenExpireTime);
+            return true;
+        } else {
+            console.log("login token expired");
+        } // timeout
     }
     accessPath = prompt("Please enter the access path of your blog:");
     if (!accessPath) {
@@ -359,9 +403,17 @@ function askForAccess() {
         return false;
     }
     liteblogApis.setBackendPathAndAccessToken(accessPath, accessKey);
-    window.Ntf.success("Access path and access key saved.");
-    localStorage.setItem("accessPath", accessPath);
-    localStorage.setItem("accessKey", accessKey);
+    // try login
+    liteblogApis.login(success = function (data) {
+        console.log(data);
+        localStorage.setItem("accessPath", accessPath);
+        localStorage.setItem("loginToken", data.token);
+        localStorage.setItem("loginTokenExpireTime", data.timeout);
+        localStorage.setItem("loginServerIdentify", thisServerIdentify);
+    }, error = function (data) {
+        console.log(data);
+        window.Ntf.error("Failed to login.");
+    });
     return true;
 }
 
