@@ -57,6 +57,7 @@ class Notify {
             type: 'info', // success, warning, error, info
             timeout: 5000, // 0: never close, otherwise in milliseconds
             keepAlive: false, // true: 不会因maxList限制而自动关闭，false: 会自动关闭
+            i18n: null,
             onClick: null,
             onRemove: null,
             onTimeout: null,
@@ -130,10 +131,14 @@ class Notify {
         this.notifyList[newNotify.id] = newNotify;
         let childNode = this.basicNotify.cloneNode(true);
         // set properties
-        childNode.querySelector(".notify-icon i").classList.add("fa",newNotify.options.icon);
+        childNode.querySelector(".notify-icon i").classList.add("fa", newNotify.options.icon);
         childNode.classList.add(newNotify.options.type);
         childNode.querySelector(".notify-message").textContent = message;
         childNode.setAttribute("notify-id", newNotify.id);
+        // set i18n
+        if (newNotify.options.i18n) {
+            childNode.querySelector(".notify-message").setAttribute("data-i18n", newNotify.options.i18n)
+        }
         // set extra style
         if (newNotify.options.extraStyle) {
             for (let key in newNotify.options.extraStyle) {
@@ -228,54 +233,60 @@ class Notify {
         return newNotify.id;
     }
 
-    alert(message) {
-        return this.add(message, {
+    alert(message, options) {
+        let newoptions = Object.assign({}, {
             type: "info",
             timeout: 3000,
             keepAlive: true,
             onClick: (notify, event) => {
                 this.remove(notify.id);
             }
-        });
+        }, options);
+        return this.add(message, newoptions);
     }
 
-    error(message) {
-        return this.add(message, {
+    error(message, options) {
+        let newoptions = Object.assign({}, {
             type: "error",
             keepAlive: true,
             onClick: (notify, event) => {
                 this.remove(notify.id);
             }
-        });
+        }, options);
+        return this.add(message, newoptions);
     }
 
-    success(message) {
-        return this.add(message, {
+    success(message, options) {
+        let newoptions = Object.assign({}, {
             type: "success",
             keepAlive: true,
             onClick: (notify, event) => {
                 this.remove(notify.id);
             }
-        });
+        },options);
+        return this.add(message, newoptions);
     }
 
-    warning(message) {
-        return this.add(message, {
+    warning(message, options) {
+        let newoptions = Object.assign({}, {
             type: "warning",
             keepAlive: true,
             onClick: (notify, event) => {
                 this.remove(notify.id);
             }
-        });
+        }, options);
+        return this.add(message, newoptions);
     }
 
-    info(message) {
-        return this.add(message, {
+    info(message, options) {
+        let newoptions = Object.assign({}, {
             type: "info",
+            keepAlive: true,
             onClick: (notify, event) => {
                 this.remove(notify.id);
             }
-        });
+        }, options);
+        return this.add(message, newoptions);
     }
 
     remove(id) {

@@ -92,5 +92,13 @@
     "sniffer_config": {
         "enabled": true,
         "public_provider": "/sniffer"
+    },
+    "render_config": {
+        "render": {
+            "rss_feed": true,
+            "site_map": true
+        },
+        "min_render_interval": 300,
+        "max_render_interval": 30000
     }
 }

@@ -5,7 +5,7 @@
             "card_image": "",
             "card_link": "",
             "card_title": "test class",
-            "icon": "fa-camera",
+            "icon": "fa-gamepad",
             "id": "2",
             "order": "0",
             "template": "card_template_split_line"
@@ -25,6 +25,7 @@
             "card_image": "https://un1c0de.com/favicon.ico",
             "card_link": "/articles/792f71474f31c02aba747ab287081cbb",
             "card_title": "Hello World",
+            "icon": "",
             "id": "8e6fafcc0ab504600217148dbec5e506",
             "order": "2",
             "template": "card_template_classical"

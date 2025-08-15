@@ -1,83 +1,83 @@
 <div class="card-input-box">
     <div class="box-drag-handle"></div>
     <div class="input-group">
-        <label for="add-card-title">Title</label>
+        <label for="add-card-title" data-i18n="title">Title</label>
         <input type="text" id="add-card-title" required>
     </div>
 
     <div class="input-group">
-        <label for="add-card-description">Description</label>
+        <label for="add-card-description" data-i18n="description">Description</label>
         <textarea id="add-card-description" rows="3" required></textarea>
     </div>
 
     <div class="input-group">
-        <label for="add-card-link">Link</label>
+        <label for="add-card-link" data-i18n="link">Link</label>
         <input type="text" id="add-card-link" value="https://your.com/link" required>
     </div>
 
     <div class="input-group">
-        <label for="add-card-image">Image</label>
+        <label for="add-card-image" data-i18n="image">Image</label>
         <input type="text" id="add-card-image" value="https://your.com/image.jpg" required>
     </div>
 
     <div class="input-group">
-        <label for="add-card-template">Template</label>
+        <label for="add-card-template" data-i18n="template">Template</label>
         <select id="add-card-template" required>
-            <option value="card_template_classical">Classical card</option>
-            <option value="card_template_split_line">Class split line</option>
+            <option value="card_template_classical" data-i18n="classical-card">Classical card</option>
+            <option value="card_template_split_line" data-i18n="class-split-line">Class split line</option>
         </select>
     </div>
 
     <!-- when choose classical card -->
     <div class="input-group" id="classical-card-input-group" style="display: none;">
-        <label for="add-card-redirect-type">Redirect type</label>
+        <label for="add-card-redirect-type" data-i18n="redirect-type">Redirect type</label>
         <select id="add-card-redirect-type">
-            <option value="proxy">Proxy</option>
-            <option value="direct">Direct</option>
+            <option value="proxy" data-i18n="proxy">Proxy</option>
+            <option value="direct" data-i18n="direct">Direct</option>
         </select>
     </div>
     <!-- end if -->
 
     <!-- when choose class split line -->
     <div class="input-group" id="split-line-input-group" style="display: none;">
-        <label for="add-card-class-icon">Icon</label>
+        <label for="add-card-class-icon" data-i18n="class-icon">Icon</label>
         <select id="add-card-class-icon">
-            <option value="fa-gamepad">Game</option>
-            <option value="fa-book">Book</option>
-            <option value="fa-music">Music</option>
-            <option value="fa-film">Film</option>
-            <option value="fa-camera">Camera</option>
-            <option value="fa-headphones">Headphones</option>
-            <option value="fa-user">User</option>
-            <option value="fa-heart">Heart</option>
-            <option value="fa-star">Star</option>
-            <option value="fa-flag">Flag</option>
+            <option value="fa-gamepad" data-i18n="game">Game</option>
+            <option value="fa-book" data-i18n="book">Book</option>
+            <option value="fa-music" data-i18n="music">Music</option>
+            <option value="fa-film" data-i18n="film">Film</option>
+            <option value="fa-camera" data-i18n="camera">Camera</option>
+            <option value="fa-headphones" data-i18n="headphones">Headphones</option>
+            <option value="fa-user" data-i18n="user">User</option>
+            <option value="fa-heart" data-i18n="heart">Heart</option>
+            <option value="fa-star" data-i18n="star">Star</option>
+            <option value="fa-flag" data-i18n="flag">Flag</option>
         </select>
     </div>
     <!-- end if -->
 
     <div class="input-group">
-        <label for="add-card-order">Order</label>
+        <label for="add-card-order" data-i18n="order">Order</label>
         <input type="number" id="add-card-order" value="1" required>
     </div>
 
     <div class="input-group">
-        <label for="add-card-detailed-title">Detailed title</label>
+        <label for="add-card-detailed-title" data-i18n="detailed-title">Detailed title</label>
         <input type="text" id="add-card-detailed-title" required>
     </div>
 
     <div class="input-group">
-        <label for="add-card-detailed-description">Detailed description</label>
+        <label for="add-card-detailed-description" data-i18n="detailed-description">Detailed description</label>
         <textarea id="add-card-detailed-description" rows="3" required></textarea>
     </div>
 
     <div class="input-group">
-        <label for="add-card-detailed-image">Detailed Image</label>
+        <label for="add-card-detailed-image" data-i18n="detailed-image">Detailed Image</label>
         <input type="text" id="add-card-detailed-image" value="https://your.com/image.jpg" required>
     </div>
 
     <div class="button-group">
-        <button type="button" class="add-card-button" onclick="OnAddCardButtonClick()">Add Card</button>
-        <button type="button" class="cancel-button" onclick="CancelInputBox()">Cancel</button>
+        <button type="button" class="add-card-button" onclick="OnAddCardButtonClick()" data-i18n="add-card">Add Card</button>
+        <button type="button" class="cancel-button" onclick="CancelInputBox()" data-i18n="cancel">Cancel</button>
     </div>
 </div>

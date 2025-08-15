@@ -4,16 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{global:IndexPageTitle}}</title>
-    <meta name="description" content="{{global:index_meta_description}}">
+    <title>Liteblog - Login</title>
+    <meta name="description" content="Login to Liteblog">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/notify.css">
     <link rel="stylesheet" href="/css/customizestyle.css">
+    <link rel="stylesheet" href="/css/login.css">
     <script src="/js/api.js"></script>
     <script src="/js/edit.js"></script>
     <script src="/js/notify.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="/js/login.js"></script>
     <script src="/js/i18n.js"></script>
     <script src="/js/inject.js"></script>
 </head>
@@ -21,9 +21,6 @@
 <body>
     <header class="index-header">
         <div class="header-left">
-            <button class="toggle-sidebar" id="toggleSidebar" aria-label="Toggle sidebar">
-                <i class="fas fa-bars"></i>
-            </button>
             <div class="logo">
                 <i class="fas fa-blog"></i>
                 <span>{{global:TopBarTitle}}</span>
@@ -39,33 +36,28 @@
                 <i class="fas fa-rss"></i>
             </button>
 
-            <button class="topbar-btn mobile-menu-btn expand-btn" id="add-btn" aria-label="Add new post">
-                <i class="fas fa-plus"></i>
-            </button>
-
-            <button class="topbar-btn mobile-menu-btn expand-btn" id="edit-btn" aria-label="Edit post">
-                <i class="fas fa-edit"></i>
-            </button>
-
-            <button class="topbar-btn mobile-menu-btn ellipsis-btn" id="mobileMenuBtn" aria-label="More options">
-                <i class="fas fa-ellipsis-v"></i>
-            </button>
-
         </div>
     </header>
-
-    <aside class="index-sidebar">
-        <ul class="sidebar-menu">
-            <!-- Menu Items here -->
-            <li onclick="document.querySelector('.main-content-container').scrollTo({top: 0, behavior:'smooth'})"><a
-                    href="#"><i class="fas fa-home"></i> <span class="menu-text" data-i18n="home">Home</span></a></li>
-        </ul>
-    </aside>
 
     <main class="index-content">
         <!-- Content here -->
         <div class="main-content-container">
-            {{rendered:cards}}
+            <div class="login-form-container">
+                <h2 class="login-title" data-i18n="login-title">Login to Liteblog</h2>
+                <div class="login-form">
+                    <div class="input-group">
+                        <label for="access-path" data-i18n="access-path">Access Path</label>
+                        <input type="text" id="access-path" name="access-path" placeholder="Access Path">
+                    </div>
+                    <div class="input-group">
+                        <label for="acccess-token" data-i18n="access-token">Access Token</label>
+                        <input type="password" id="access-token" name="access-token" placeholder="Access Token">
+                    </div>
+                    <div class="button-group">
+                        <button id="login-button" class="button" data-i18n="login">Login</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="bottom-bar" class="bottom-bar">

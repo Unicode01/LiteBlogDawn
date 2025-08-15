@@ -5,7 +5,7 @@
             <div class="comment-author">{{comment_author}}</div>
             <div class="comment-reply-to" data-reply-to="{{comment_reply_to}}"></div>
         </div>
-        <button id="comment-Reply" class="button comment-reply" onclick='OnReplyButtonClick("{{comment_id}}")'>Reply</button>
+        <button id="comment-Reply" class="button comment-reply" onclick='OnReplyButtonClick("{{comment_id}}")' data-i18n="reply">Reply</button>
     </div>
     <div id="comment-Date" class="comment-date">{{comment_date}}</div>
     <div id="comment-Content" class="comment-content">{{comment_content}}</div>
@@ -14,6 +14,9 @@
         var reply_to = "{{comment_reply_to}}";
         var thisE = document.querySelector(`#article-comment[comment-id="${comment_id}"]`);
         var reply_to_element = document.querySelector(`#article-comment[comment-id="${reply_to}"]`)
+        if (reply_to == "") {
+            thisE.querySelector('.comment-reply-to').remove();
+        }
         if (reply_to_element) {
             var replyedCommentAuthor = reply_to_element.querySelector('.comment-author').textContent.trim();
             thisE.querySelector('.comment-reply-to').textContent = `(@${replyedCommentAuthor})`;

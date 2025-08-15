@@ -1,12 +1,11 @@
-
 const template_new_post = `{{file:template_new_post}}`
 const template_new_post_direct = `{{file:template_new_post_direct}}`
 const index_edit_card_overlay = `
 <div class="edit-overlay">
 <div class="edit-overlag-button" id="move-up-card-button"><i class="fa fa-caret-up"></i></div>
 <div class="edit-overlag-button" id="move-down-card-button"><i class="fa fa-caret-down"></i></div>
-<div class="edit-overlag-button" id="edit-card-button">Edit <i class="fa fa-pencil"></i></div>
-<div class="edit-overlag-button" id="delete-card-button">Delete <i class="fa fa-trash"></i></div>
+<div class="edit-overlag-button" id="edit-card-button" data-i18n="edit">Edit <i class="fa fa-pencil"></i></div>
+<div class="edit-overlag-button" id="delete-card-button" data-i18n="delete">Delete <i class="fa fa-trash"></i></div>
 </div>
 `
 const template_add_card_input_form = `{{file:add_card_input_box}}`
@@ -72,6 +71,7 @@ function editCard(card) {
         input_form_dom.querySelector("#add-card-detailed-title").parentNode.style.display = "none";
         input_form_dom.querySelector("#add-card-detailed-description").parentNode.style.display = "none";
         input_form_dom.querySelector("#add-card-detailed-image").parentNode.style.display = "none";
+        input_form_dom.querySelector("#add-card-redirect-type").parentNode.style.display = "none";
 
         switch (data.template) {
             case 'card_template_classical':
@@ -84,12 +84,15 @@ function editCard(card) {
 
         // change btn text
         input_form_dom.querySelector(".add-card-button").textContent = "Save";
+        input_form_dom.querySelector(".add-card-button").setAttribute("data-i18n", "save");
 
         document.body.appendChild(input_form_dom);
         addInputBoxSelectEventListeners();
     }, error = function (data) {
         console.log(data);
-        window.Ntf.error("Failed to get card data.");
+        window.Ntf.error("Failed to get card data.", {
+            i18n: "failed-to-get-card-data",
+        });
     })
 
 }
@@ -103,7 +106,9 @@ function addInputBoxSelectEventListeners() {
             case "card_template_classical":
                 // hide split line fields
                 inputbox.querySelector("#split-line-input-group").style.display = "none";
-                inputbox.querySelector("#classical-card-input-group").style.display = "";
+                if (inputbox.getAttribute("mode") != "edit") {
+                    inputbox.querySelector("#classical-card-input-group").style.display = "";
+                }
                 break;
             case "card_template_split_line":
                 // show split line fields
@@ -142,7 +147,9 @@ function deleteCard(card) {
         articleId = card.querySelector(".card-classical-link").getAttribute("href").split("/")[2];
         liteblogApis.deleteArticle(articleId, function (data) {
             console.log(data);
-            window.Ntf.success("Article deleted.");
+            window.Ntf.success("Article deleted.", {
+                i18n: "article-deleted",
+            });
         }, function (data) {
             console.log(data);
         });
@@ -150,7 +157,9 @@ function deleteCard(card) {
     liteblogApis.deleteCard(cardId, success = function (data) {
         console.log(data);
         card.parentNode.removeChild(card);
-        window.Ntf.success("Card deleted.");
+        window.Ntf.success("Card deleted.", {
+            i18n: "card-deleted",
+        });
     }, error = function (data) {
         console.log(data);
     })
@@ -165,10 +174,13 @@ function deleteComment(commentId) {
         window.Ntf.add("Comment deleted successfully!", {
             timeout: 3000,
             type: "success",
+            i18n: "comment-deleted",
         });
     }, error = function (data) {
         console.log(data);
-        window.Ntf.error("Failed to delete comment.");
+        window.Ntf.error("Failed to delete comment.", {
+            i18n: "failed-to-delete-comment",
+        });
     });
 }
 
@@ -188,10 +200,14 @@ function saveEditMode() {
     // send request to server
     liteblogApis.editOrder(cards, success = function (data) {
         console.log(data);
-        window.Ntf.success("Order saved.");
+        window.Ntf.success("Order saved.", {
+            i18n: "order-saved",
+        });
     }, error = function (data) {
         console.log(data);
-        window.Ntf.error("Failed to save order.");
+        window.Ntf.error("Failed to save order.", {
+            i18n: "failed-to-save-order",
+        });
     })
 }
 
@@ -228,7 +244,9 @@ function OnAddCardButtonClick() {
                     "article_description": detailed_description,
                 }
             }, success = function (data) {
-                window.Ntf.success("Article created.");
+                window.Ntf.success("Article created.", {
+                    i18n: "article-created",
+                });
                 console.log(data);
                 article_id = data.article_id;
 
@@ -249,11 +267,14 @@ function OnAddCardButtonClick() {
                         type: "success",
                         onRemove: function () {
                             window.location.reload();
-                        }
+                        },
+                        i18n: "added-successfully",
                     })
                 }, error = function (data) {
                     console.log(data);
-                    window.Ntf.error("Failed to add card.");
+                    window.Ntf.error("Failed to add card.", {
+                        i18n: "failed-to-add-card",
+                    });
                 })
 
             }, error = function (data) {
@@ -277,11 +298,14 @@ function OnAddCardButtonClick() {
                     type: "success",
                     onRemove: function () {
                         window.location.reload();
-                    }
+                    },
+                    i18n: "added-successfully"
                 })
             }, error = function (data) {
                 console.log(data);
-                window.Ntf.error("Failed to add card.");
+                window.Ntf.error("Failed to add card.", {
+                    i18n: "failed-to-add-card",
+                });
             })
         }
 
@@ -306,11 +330,14 @@ function OnAddCardButtonClick() {
                 type: "success",
                 onRemove: function () {
                     window.location.reload();
-                }
+                },
+                i18n: "edited-successfully"
             })
         }, error = function (data) {
             console.log(data);
-            window.Ntf.error("Failed to edit card.");
+            window.Ntf.error("Failed to edit card.", {
+                i18n: "failed-to-edit-card",
+            });
         })
     }
 }
@@ -385,36 +412,14 @@ function askForAccess() {
         loginTokenExpireTime = localStorage.getItem("loginTokenExpireTime");
         serverIdentify = localStorage.getItem("loginServerIdentify");
 
-        if (loginToken && parseInt(loginTokenExpireTime) > new Date().getTime()/1000 && thisServerIdentify === serverIdentify) { // check if login token expired
+        if (loginToken && parseInt(loginTokenExpireTime) > new Date().getTime() / 1000 && thisServerIdentify === serverIdentify) { // check if login token expired
             liteblogApis.setBackendLoginToken(path, loginToken, loginTokenExpireTime);
             return true;
         } else {
             console.log("login token expired");
         } // timeout
     }
-    accessPath = prompt("Please enter the access path of your blog:");
-    if (!accessPath) {
-        window.Ntf.error("Access path is required.");
-        return false;
-    }
-    accessKey = prompt("Please enter the access key of your blog:");
-    if (!accessKey) {
-        window.Ntf.error("Access key is required.");
-        return false;
-    }
-    liteblogApis.setBackendPathAndAccessToken(accessPath, accessKey);
-    // try login
-    liteblogApis.login(success = function (data) {
-        console.log(data);
-        localStorage.setItem("accessPath", accessPath);
-        localStorage.setItem("loginToken", data.token);
-        localStorage.setItem("loginTokenExpireTime", data.timeout);
-        localStorage.setItem("loginServerIdentify", thisServerIdentify);
-    }, error = function (data) {
-        console.log(data);
-        window.Ntf.error("Failed to login.");
-    });
-    return true;
+    window.open("/login.html?redirect=" + location.href + "&blank=true", "_blank")
 }
 
 function clearSavedAccess() {

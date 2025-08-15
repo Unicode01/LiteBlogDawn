@@ -93,10 +93,13 @@ function enterEdit() {
                 onRemove: function () {
                     window.location.reload();
                 },
+                i18n:"changes-saved",
             });
             return;
         }, err = function (data) {
-            window.Ntf.error("Failed to save changes");
+            window.Ntf.error("Failed to save changes",{
+                i18n: "failed-to-save-changes",
+            });
             return;
         });
         return;
@@ -166,7 +169,7 @@ function saveChanges(suc, err) {
     const article_id = window.location.pathname.split("/")[2];
     const link = document.querySelector(".data-container").getAttribute("data-link");
     // build article
-    article = buildArticle(title, desc, img, link);
+    article = buildArticle("proxy",title, desc, img, link);
     liteblogApis.editArticle({
         article_id: article_id,
         title: title,
@@ -196,11 +199,13 @@ function deleteArticle() {
             onRemove: function () {
                 window.location.href = "/";
             },
+            i18n: "article-deleted",
         })
     }, function (data) {
         console.log("Failed to delete article", data);
         window.Ntf.add("Failed to delete article", {
             type: "error",
+            i18n: "failed-to-delete-article",
         })
 
     });
@@ -269,10 +274,13 @@ function copyText(text) {
             console.log("Copied to clipboard:" + text);
             window.Ntf.add("Copied to clipboard!", {
                 type: "success",
+                i18n: "copied-to-clipboard",
             });
         }, function (err) {
             console.error("Failed to copy to clipboard: " + err);
-            window.Ntf.error("Failed to copy to clipboard");
+            window.Ntf.error("Failed to copy to clipboard",{
+                i18n: "failed-to-copy-to-clipboard"
+            });
         });
     } else {
         // try fallback method
@@ -285,6 +293,7 @@ function copyText(text) {
         console.log("Copied to clipboard!" + text);
         window.Ntf.add("Copied to clipboard!", {
             type: "success",
+            i18n: "copied-to-clipboard",
         });
     }
 }
@@ -322,7 +331,9 @@ function CommentVerify(success) {
     verifyDom = document.getElementById("new-comment-verify-container");
     if (!verifyDom || comment_check_type == "") {
         console.log("Comment system has been disabled!");
-        window.Ntf.error("Comment system has been disabled!");
+        window.Ntf.error("Comment system has been disabled!",{
+            i18n: "comment-system-disabled",
+        });
         return;
     }
     verifyDom.style.display = "";
@@ -379,7 +390,9 @@ function AddComment(token, replyto) {
     author = document.getElementById("new-comment-author-name").value;
     email = document.getElementById("new-comment-author-email").value;
     if (!isAvailableEmailAddress(email)) {
-        window.Ntf.error("Invalid email address");
+        window.Ntf.error("Invalid email address",{
+            i18n: "invalid-email-address",
+        });
         return;
     }
     liteblogApis.addComment(
@@ -397,11 +410,14 @@ function AddComment(token, replyto) {
                 onRemove: function () {
                     window.location.reload();
                 },
+                i18n: "comment-added",
             });
         },
         error = function (data) {
             console.log("Failed to add comment", data);
-            window.Ntf.error("Failed to add comment");
+            window.Ntf.error("Failed to add comment",{
+                i18n: "failed-to-add-comment",
+            });
         }
     )
 }
