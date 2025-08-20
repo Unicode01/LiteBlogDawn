@@ -4,7 +4,6 @@ const sidebarItemHTML = `
 `
 
 function init() {
-    
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('edit-btn').addEventListener('click', function () {
             console.log('edit clicked');
@@ -34,10 +33,56 @@ function init() {
         document.getElementById('theme-btn').addEventListener('click', function () {
             SwitchTheme();
         });
+        document.getElementById('search-button')?.addEventListener('click', function () {
+            console.log('search clicked');
+            const searchText = document.getElementById('search-bar').value.trim();
+            const searchEngine = document.getElementById('search-engine-select').value;
+
+            if (searchText) {
+                // set prefer engine
+                localStorage.setItem('searchEngine', searchEngine);
+                // set search history
+                const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+                const newSearchHistory = [searchText,...searchHistory.filter(item => item !== searchText)];
+                localStorage.setItem('searchHistory', JSON.stringify(newSearchHistory.slice(0, 10))); // limit to 10 items
+                // replace search key workds
+                search_url = searchEngine.replace(/\{query}/g, searchText);
+                window.open(search_url, '_blank');
+            } else {
+                window.Ntf.add('Please enter search words.', {
+                    type: 'error',
+                    i18n: 'enter-search-words'
+                });
+            }
+        });
+        document.getElementById('search-bar')?.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'Enter': // enter
+                    document.getElementById('search-button').click();
+                    break;
+                case 'Tab': // tab
+                    console.log('tab pressed');
+                    if (document.getElementById('search-bar').value.trim() === '') { // empty search bar
+                        placeholder = document.getElementById('search-bar').getAttribute('placeholder');
+                        document.getElementById('search-bar').value = placeholder;
+                    }
+                    event.preventDefault();
+                    break;
+            }
+        });
+        document.getElementById('search-bar')?.addEventListener('focus', function () {
+            // console.log('search bar focused');
+            pop_search_history();
+        });
+        document.getElementById('search-bar')?.addEventListener('blur', function () {
+            // console.log('search bar blured');
+            document.querySelector('#search-history-container').style.display = 'none';
+        });
     });
     addSidebarListeners();
     addFillSidebarListener();
     addBoxDragHandlerListeners();
+    initSearchBar();
 }
 
 function moveupCard(cardid) {
@@ -65,9 +110,9 @@ function moveupCard(cardid) {
             next: null,
             order: index // 初始 order 设为当前索引
         };
-        
+
         nodes.push(node);
-        
+
         if (index === 0) {
             head = node;
         } else {
@@ -96,12 +141,12 @@ function moveupCard(cardid) {
     } else {
         head = targetNode; // 更新头节点
     }
-    
+
     targetNode.prev = prevPrevNode;
     targetNode.next = prevNode;
     prevNode.prev = targetNode;
     prevNode.next = nextNode;
-    
+
     if (nextNode) {
         nextNode.prev = prevNode;
     } else {
@@ -148,9 +193,9 @@ function movedownCard(cardid) {
             prev: null,
             next: null
         };
-        
+
         nodes.push(node);
-        
+
         if (index === 0) {
             head = node;
         } else {
@@ -179,12 +224,12 @@ function movedownCard(cardid) {
     } else {
         head = nextNode; // 更新头节点
     }
-    
+
     nextNode.prev = prevNode;
     nextNode.next = targetNode;
     targetNode.prev = nextNode;
     targetNode.next = nextNextNode;
-    
+
     if (nextNextNode) {
         nextNextNode.prev = targetNode;
     } else {
@@ -273,6 +318,84 @@ function addFillSidebarListener() {
                 element.scrollIntoView({ behavior: "smooth", block: "start" });
             });
         });
+    });
+}
+
+function initSearchBar() {
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!document.getElementById('search-engine-select')) {
+            return;
+        }
+        preferEngine = localStorage.getItem('searchEngine') || 'https://www.google.com/search?q={query}';
+        // console.log(preferEngine)
+        document.getElementById('search-engine-select').value = preferEngine;
+        document.getElementById('search-bar').placeholder = get_last_search();
+    });
+}
+
+function get_last_search() {
+    const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    if (searchHistory.length > 0) {
+        return searchHistory[0];
+    } else {
+        return 'Search...';
+    }
+}
+
+function pop_search_history() {
+    const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    const searchHistoryContainer = document.querySelector('#search-history-container');
+    searchHistoryContainer.style.display = '';
+    // delete last search from history
+    searchHistoryContainer.innerHTML = '';
+    if (searchHistory.length === 0) {
+        searchHistoryContainer.style.display = 'none';
+        return;
+    }
+    // add history items
+    searchHistory.forEach(function (item) {
+        // create history item
+        const historyItem = document.createElement('div');
+        historyItem.classList.add('search-history-item');
+        // add item icon
+        const itemIcon = document.createElement('i');
+        itemIcon.classList.add('fas', 'fa-history', 'search-history-item-icon');
+        historyItem.appendChild(itemIcon);
+        // add item text
+        const itemText = document.createElement('span');
+        itemText.textContent = item;
+        itemText.classList.add('search-history-item-text');
+        historyItem.appendChild(itemText);
+        // add delete button
+        const deleteBtn = document.createElement('i');
+        deleteBtn.classList.add('fas', 'fa-times', 'delete-search-history-btn');
+        historyItem.appendChild(deleteBtn);
+        // add click event listener to history item
+        historyItem.addEventListener('click', function (e) {
+            e.preventDefault();
+            // set search bar value
+            document.getElementById('search-bar').value = item;
+            // close search history container
+            // searchHistoryContainer.style.display = 'none';
+        });
+        // add mousedown event listener to prevent focus out.
+        historyItem.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+        });
+        // add click event listener to delete button
+        deleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // remove item from history
+            const index = searchHistory.indexOf(item);
+            searchHistory.splice(index, 1);
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            // remove item from container
+            searchHistoryContainer.removeChild(e.target.closest('.search-history-item'));
+        });
+
+        // add history item to container
+        searchHistoryContainer.appendChild(historyItem);
     });
 }
 

@@ -65,5 +65,11 @@
     "login-failed": "登录失败",
     "article-created": "文章已创建",
     "reply": "回复",
-    "save": "保存"
+    "save": "保存",
+    "search-bar": "搜索栏",
+    "enter-search-words": "请输入搜索关键词",
+    "google": "谷歌",
+    "bing": "必应",
+    "baidu": "百度",
+    "yahoo": "雅虎"
 }

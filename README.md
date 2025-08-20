@@ -13,3 +13,4 @@
 支持的卡片类型:
 - `card_template_classical` // 经典卡片
 - `card_template_split_line` // 分类分割线
+- `card_template_search_bar` // 搜索栏

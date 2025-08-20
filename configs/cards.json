@@ -7,7 +7,7 @@
             "card_title": "test class",
             "icon": "fa-gamepad",
             "id": "2",
-            "order": "0",
+            "order": "1",
             "template": "card_template_split_line"
         },
         {
@@ -17,7 +17,7 @@
             "card_title": "test class2",
             "icon": "fa-music",
             "id": "3",
-            "order": "1",
+            "order": "2",
             "template": "card_template_split_line"
         },
         {
@@ -27,8 +27,33 @@
             "card_title": "Hello World",
             "icon": "",
             "id": "8e6fafcc0ab504600217148dbec5e506",
-            "order": "2",
+            "order": "3",
             "template": "card_template_classical"
+        },
+        {
+            "card_description": "哔哩哔哩 (゜-゜)つロ 干杯~",
+            "card_image": "https://www.bilibili.com/favicon.ico",
+            "card_link": "/articles/0f4cedf004202c5ed96e60d73f11f9d6",
+            "card_title": "BiliBili",
+            "icon": "fa-gamepad",
+            "id": "abd19c559397f51509535445604cad41",
+            "order": "4",
+            "template": "card_template_classical"
+        },
+        {
+            "card_description": "谷歌一下",
+            "card_image": "https://www.google.com/favicon.ico",
+            "card_link": "/articles/c0f639964febe3be4da1d5ffff27721f",
+            "card_title": "Google",
+            "icon": "fa-gamepad",
+            "id": "b9c26fbbaa0461936c2b7d5a34f193a2",
+            "order": "5",
+            "template": "card_template_classical"
+        },
+        {
+            "id": "0103a0c203510ba7b3d6a7d4ab0ad301",
+            "order": "0",
+            "template": "card_template_search_bar"
         }
     ]
 }

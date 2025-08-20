@@ -26,30 +26,31 @@
 }
 
 :root[data-theme="dark"] {
-    --base-white: #121212;
-    --base-black: #f8f9fa;
-    --base-gray: #444;
 
-    --base-gray-100: #212529;
-    --base-gray-200: #343a40;
-    --base-gray-300: #495057;
-    --base-gray-400: #6c757d;
-    --base-gray-500: #adb5bd;
-    --base-gray-600: #ced4da;
-    --base-gray-700: #e9ecef;
-    --base-gray-800: #f8f9fa;
+    --base-white: #16171d;
+
+    --base-black: #f1f2f4;
     --base-gray-900: #ffffff;
-
-    --primary: #6c8eff;
-    --base-red: #ff6b6b;
-    --base-green: #4cd97b;
+    
+    
+    --base-gray-100: #23252b;
+    --base-gray-200: #2e3038;
+    --base-gray-300: #464853;
+    --base-gray-400: #5e616e;
+    --base-gray-500: #7d808e;
+    --base-gray-600: #9ea1ae;
+    --base-gray-700: #c0c3ce;
+    --base-gray-800: #e0e2e7;
+    
+    --primary: #5a7eff;
+    --base-red: #ff5c5c;
+    --base-green: #30d158;
     --base-blue: #4d9bff;
     --base-indigo: #8a63f2;
     --base-purple: #9d7cff;
 
     img {
-        filter: brightness(0.7);
-        /* invert the colors of images in dark mode */
+        filter: brightness(.85) contrast(1.1);
     }
 }
 

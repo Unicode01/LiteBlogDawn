@@ -121,6 +121,8 @@ function enterEdit() {
     edit_btn.appendChild(edit_icon)
     edit_overlay.appendChild(edit_btn)
     img_dom.appendChild(edit_overlay)
+    edit_overlay.offsetHeight; // force reflow
+    edit_overlay.style.opacity = 1;
     // add edit overlay to comment dom
     const comment_overlay = document.createElement('div')
     comment_overlay.classList.add('comment-overlay')
@@ -142,6 +144,8 @@ function enterEdit() {
             deleteComment(comment.getAttribute('comment-id'));
         });
         comment.appendChild(cloneNode)
+        cloneNode.offsetTop; // force reflow
+        cloneNode.style.opacity = 1;
     })
     // add contenteditable attribute and on-edit class to title and description
     title_dom.setAttribute('contenteditable', true)

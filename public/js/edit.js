@@ -32,6 +32,7 @@ function enterEditMode() {
     overlay_dom = domparser.parseFromString(index_edit_card_overlay, "text/html").body.firstChild;
     document.querySelectorAll(".card-container").forEach(function (card) {
         overlay = overlay_dom.cloneNode(true);
+        overlay.style.borderRadius = window.getComputedStyle(card).borderRadius;
         overlay.querySelector("#edit-card-button").addEventListener("click", function () {
             editCard(card);
         });
@@ -80,6 +81,9 @@ function editCard(card) {
             case 'card_template_split_line':
                 input_form_dom.querySelector("#add-card-template > option[value='card_template_split_line']").selected = true;
                 break;
+            case 'card_template_search_bar':
+                input_form_dom.querySelector("#add-card-template > option[value='card_template_search_bar']").selected = true;
+                break;
         }
 
         // change btn text
@@ -113,6 +117,11 @@ function addInputBoxSelectEventListeners() {
             case "card_template_split_line":
                 // show split line fields
                 inputbox.querySelector("#split-line-input-group").style.display = "";
+                inputbox.querySelector("#classical-card-input-group").style.display = "none";
+                break;
+            case "card_template_search_bar":
+                // hide all
+                inputbox.querySelector("#split-line-input-group").style.display = "none";
                 inputbox.querySelector("#classical-card-input-group").style.display = "none";
                 break;
         }
@@ -307,6 +316,27 @@ function OnAddCardButtonClick() {
                     i18n: "failed-to-add-card",
                 });
             })
+        } else if (template == 'card_template_search_bar') {
+            liteblogApis.addCard({
+                order: String(order),
+                template: template,
+            }, success = function (data) {
+                console.log(data);
+                CancelInputBox();
+                window.Ntf.add("Added Successfully!", {
+                    timeout: 3000,
+                    type: "success",
+                    onRemove: function () {
+                        window.location.reload();
+                    },
+                    i18n: "added-successfully"
+                })
+            }, error = function (data) {
+                console.log(data);
+                window.Ntf.error("Failed to add card.", {
+                    i18n: "failed-to-add-card",
+                });
+            })
         }
 
 
@@ -419,7 +449,7 @@ function askForAccess() {
             console.log("login token expired");
         } // timeout
     }
-    window.open("/login.html?redirect=" + location.href + "&blank=true", "_blank")
+    window.open("/login.html?" + "blank=true" + "&redirect=" + location.href, "_blank")
 }
 
 function clearSavedAccess() {

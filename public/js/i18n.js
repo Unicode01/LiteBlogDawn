@@ -58,6 +58,10 @@ class i18n {
         this.translateElement(element);
         element.querySelectorAll('*').forEach(child => this.translateElement(child));
     }
+
+    get_translation(key) {
+        return this.translations[key]
+    }
 }
 
 

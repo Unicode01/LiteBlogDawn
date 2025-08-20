@@ -1,0 +1,28 @@
+<div id="card-container" card-id="{{id}}" class="card-container card-container-search-bar" style="order:{{order}};">
+    <div class="search-engine-switcher">
+        <select id="search-engine-select" class="search-engine-select" aria-label="Search Engine">
+            <option data-i18n="google" value="https://www.google.com/search?q={query}">Google</option>
+            <option data-i18n="bing" value="https://www.bing.com/search?q={query}">Bing</option>
+            <option value="https://duckduckgo.com/?q={query}">DuckDuckGo</option>
+            <option data-i18n="baidu" value="https://www.baidu.com/s?wd={query}">Baidu</option>
+            <option data-i18n="yahoo" value="https://search.yahoo.com/search?p={query}">Yahoo</option>
+
+        </select>
+
+    </div>
+    <div class="search-bar-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search...">
+    </div>
+    <div class="search-button-container">
+        <button id="search-button" class="search-button" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </button>
+    </div>
+    <div id="search-history-container" class="search-history-container" style="display: none;">
+        
+    </div>
+</div>
