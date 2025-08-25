@@ -2,10 +2,11 @@ const template_new_post = `{{file:template_new_post}}`
 const template_new_post_direct = `{{file:template_new_post_direct}}`
 const index_edit_card_overlay = `
 <div class="edit-overlay">
-<div class="edit-overlag-button" id="move-up-card-button"><i class="fa fa-caret-up"></i></div>
-<div class="edit-overlag-button" id="move-down-card-button"><i class="fa fa-caret-down"></i></div>
-<div class="edit-overlag-button" id="edit-card-button" data-i18n="edit">Edit <i class="fa fa-pencil"></i></div>
-<div class="edit-overlag-button" id="delete-card-button" data-i18n="delete">Delete <i class="fa fa-trash"></i></div>
+<div class="edit-overlay-button" id="show-card-button"><i class="fa fa-eye"></i></div>
+<div class="edit-overlay-button" id="move-up-card-button"><i class="fa fa-caret-up"></i></div>
+<div class="edit-overlay-button" id="move-down-card-button"><i class="fa fa-caret-down"></i></div>
+<div class="edit-overlay-button" id="edit-card-button" data-i18n="edit">Edit <i class="fa fa-pencil"></i></div>
+<div class="edit-overlay-button" id="delete-card-button" data-i18n="delete">Delete <i class="fa fa-trash"></i></div>
 </div>
 `
 const template_add_card_input_form = `{{file:add_card_input_box}}`

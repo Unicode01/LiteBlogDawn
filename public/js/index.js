@@ -23,6 +23,22 @@ function init() {
                     movedownCard(cardid);
                 })
             });
+            document.querySelectorAll('#show-card-button').forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    let card = e.target.closest('.card-container');
+                    console.log(card);
+                    let overlay = e.target.closest('.edit-overlay');
+                    console.log(overlay);
+                    overlay.style.opacity = '0';
+                    overlay.style.pointerEvents = 'none';
+                    // add moveout event
+                    card.addEventListener('mouseleave', function () {
+                        overlay.style.opacity = '';
+                        overlay.style.pointerEvents = '';
+                    });
+
+                });
+            });
         });
         document.getElementById('add-btn').addEventListener('click', function () {
             console.log('add clicked');
@@ -43,7 +59,7 @@ function init() {
                 localStorage.setItem('searchEngine', searchEngine);
                 // set search history
                 const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-                const newSearchHistory = [searchText,...searchHistory.filter(item => item !== searchText)];
+                const newSearchHistory = [searchText, ...searchHistory.filter(item => item !== searchText)];
                 localStorage.setItem('searchHistory', JSON.stringify(newSearchHistory.slice(0, 10))); // limit to 10 items
                 // replace search key workds
                 search_url = searchEngine.replace(/\{query}/g, searchText);
@@ -428,6 +444,10 @@ function onBoxMouseUp() {
     document.removeEventListener('mousemove', onBoxMouseMove);
     document.removeEventListener('mouseup', onBoxMouseUp);
     dragTarget = null;
+}
+
+function doLazyLoad() {
+
 }
 
 init();

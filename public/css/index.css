@@ -430,7 +430,6 @@ body {
         z-index: 999;
         display: flex;
         flex-wrap: wrap;
-        position: absolute;
         align-items: center;
         justify-content: center;
         background-color: var(--base-gray-100);
@@ -503,10 +502,10 @@ body {
     color: white;
     transition: all 0.2s ease-in-out;
 
-    .edit-overlag-button {
+    .edit-overlay-button {
         margin: 0 5px;
         border: 1px solid var(--base-gray-900);
-        font-size: var(--primary-font-size);
+        font-size: var(--secondary-font-size);
         border-radius: 5px;
         padding: 5px;
         cursor: pointer;
