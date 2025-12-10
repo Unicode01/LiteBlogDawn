@@ -180,7 +180,7 @@ function addCard() {
 function deleteCard(card) {
     const cardId = card.getAttribute("card-id");
     const cardInfoContainer = card.querySelector(".info-container");
-    const cardRedirectType = cardInfoContainer.getAttribute("data-redirect-type");
+    const cardRedirectType = cardInfoContainer?.getAttribute("data-redirect-type");
     console.log("deleteCard", cardId);
     if (!confirm(i18n.get_translation("confirm-to-delete-card", "Are you sure you want to delete this card?"))) return;
     if (cardRedirectType == "direct") {
