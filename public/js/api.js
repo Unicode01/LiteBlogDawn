@@ -9,7 +9,7 @@ this.liteblogApis = {
         this.loginTokenExpireTime = parseInt(expire_time);
     },
     getConfusedToken: function () {
-        if (this.loginToken && this.loginTokenExpireTime > (new Date().getTime()/1000)) {
+        if (this.loginToken && this.loginTokenExpireTime > (new Date().getTime() / 1000)) {
             return this.loginToken;
         }
         class Xorshift32 {
@@ -419,6 +419,26 @@ this.liteblogApis = {
                 success(data);
             })
             .catch(e => error(e));
+    },
+    uploadFile: function (file, expiry_days, success, error) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('expiry_days', expiry_days);
+        formData.append('token', this.getConfusedToken())
+        fetch("/" + this.backendPath + "/upload_file", {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+            })
+            .then(data => success(data))
+            .catch(e => error(e));
+
     },
     // public class
     addComment: function (verify_token, article_id, content, author, email, reply_to, subscribed, success, error) {

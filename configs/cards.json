@@ -41,19 +41,20 @@
             "template": "card_template_classical"
         },
         {
-            "card_description": "谷歌一下",
-            "card_image": "https://www.google.com/favicon.ico",
-            "card_link": "/articles/c0f639964febe3be4da1d5ffff27721f",
-            "card_title": "Google",
-            "icon": "fa-gamepad",
-            "id": "b9c26fbbaa0461936c2b7d5a34f193a2",
-            "order": "5",
-            "template": "card_template_classical"
-        },
-        {
             "id": "0103a0c203510ba7b3d6a7d4ab0ad301",
             "order": "0",
             "template": "card_template_search_bar"
+        },
+        {
+            "card_description": "谷歌一下~",
+            "card_image": "https://www.google.com/favicon.ico",
+            "card_link": "/redirect.html?name=title\u0026amp;url=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8=",
+            "card_title": "Google",
+            "icon": "fa-gamepad",
+            "id": "3fa67f6eeb379a45c056a8e6e0df775a",
+            "order": "5",
+            "redirect_type": "proxy",
+            "template": "card_template_classical"
         }
     ]
 }

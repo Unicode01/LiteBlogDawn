@@ -5,6 +5,8 @@
     "RSSChannelTitle": "LiteBlog RSS Feed",
     "RSSLinkHead": "https://example.com",
     "SiteMapLinkHead": "https://example.com",
+    "CustomStyle": "/css/customizestyle.css",
+    "CustomScript": "/js/inject.js",
     "TopBarTitle": "DawnTags",
     "app_name": "LiteBlog",
     "blog_language_code": "en",

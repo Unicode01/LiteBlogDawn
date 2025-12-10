@@ -11,6 +11,24 @@
                 "block_time=60",
                 "cycle=10"
             ]
+        },
+        {
+            "name": "auto_blocked_by_path_traversal-IP-143.110.174.245",
+            "action": 1,
+            "rule": "143.110.174.245",
+            "type": "ipaddr",
+            "timeout": 1765362427,
+            "reason": "path traversal",
+            "args": null
+        },
+        {
+            "name": "auto_blocked_by_path_traversal-IP-113.44.155.89",
+            "action": 1,
+            "rule": "113.44.155.89",
+            "type": "ipaddr",
+            "timeout": 1765363796,
+            "reason": "path traversal",
+            "args": null
         }
     ]
 }

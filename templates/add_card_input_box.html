@@ -62,20 +62,22 @@
         <input type="number" id="add-card-order" value="1" required>
     </div>
 
+    <!-- When choose Classical Card and redirect type is proxy -->
     <div class="input-group">
         <label for="add-card-detailed-title" data-i18n="detailed-title">Detailed title</label>
-        <input type="text" id="add-card-detailed-title" required>
+        <input type="text" id="add-card-detailed-title" class="card-proxy-input-group" required>
     </div>
 
     <div class="input-group">
         <label for="add-card-detailed-description" data-i18n="detailed-description">Detailed description</label>
-        <textarea id="add-card-detailed-description" rows="3" required></textarea>
+        <textarea id="add-card-detailed-description" class="card-proxy-input-group" rows="3" required></textarea>
     </div>
 
     <div class="input-group">
         <label for="add-card-detailed-image" data-i18n="detailed-image">Detailed Image</label>
-        <input type="text" id="add-card-detailed-image" value="https://your.com/image.jpg" required>
+        <input type="text" id="add-card-detailed-image" class="card-proxy-input-group" value="https://your.com/image.jpg" required>
     </div>
+    <!-- End if -->
 
     <div class="button-group">
         <button type="button" class="add-card-button" onclick="OnAddCardButtonClick()" data-i18n="add-card">Add Card</button>

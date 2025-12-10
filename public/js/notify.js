@@ -53,7 +53,7 @@ class Notify {
             extraStyle: null,
         }, settings);
         this.defaultOptions = Object.assign({}, {
-            icon: '/img/notify-info.svg',
+            icon: 'fa-info-circle',
             type: 'info', // success, warning, error, info
             timeout: 5000, // 0: never close, otherwise in milliseconds
             keepAlive: false, // true: 不会因maxList限制而自动关闭，false: 会自动关闭
@@ -287,6 +287,156 @@ class Notify {
             }
         }, options);
         return this.add(message, newoptions);
+    }
+
+    /**
+     * 创建可控的进度通知
+     * @param {string} message - 初始消息
+     * @param {object} options - 配置选项
+     * @returns {object} 控制器对象，包含 setProgress, setMessage, complete, close 方法
+     * 
+     * @example
+     * const uploader = window.Notify.progress("Uploading...", { type: "info" });
+     * uploader.setProgress(50);  // 设置进度为 50%
+     * uploader.setMessage("Uploading: 50%");  // 更新消息
+     * uploader.complete("Upload complete!", 3000);  // 完成，3秒后消失
+     * uploader.close();  // 手动关闭
+     */
+    progress(message, options = {}) {
+        const self = this;
+        const progressOptions = Object.assign({}, {
+            type: 'info',
+            timeout: 0,  // 默认不自动关闭
+            keepAlive: true,
+            onClick: null,  // 进度条默认点击不关闭
+        }, options);
+
+        // 创建通知
+        const id = this.add(message, progressOptions);
+        const node = this.notiContainer.querySelector('[notify-id="' + id + '"]');
+
+        // 设置为手动控制进度条模式
+        if (node) {
+            node.style.setProperty("--notify-duration", "0ms");
+            node.style.setProperty("--progress-scale", "0");
+            node.classList.add("notify-progress-manual");
+        }
+
+        // 返回控制器
+        return {
+            id: id,
+            node: node,
+
+            /**
+             * 设置进度 (0-100)
+             * @param {number} percent - 进度百分比
+             */
+            setProgress: function (percent) {
+                if (!node || !self.notifyList[id]) return;
+                const scale = Math.max(0, Math.min(100, percent)) / 100;
+                // 从右向左填充进度条
+                node.style.setProperty("--progress-transform-origin", "left");
+                node.style.transition = "none";
+                node.offsetHeight; // force reflow
+                node.style.setProperty("--progress-scale", scale.toString());
+            },
+
+            /**
+             * 更新消息文本
+             * @param {string} newMessage - 新消息
+             */
+            setMessage: function (newMessage) {
+                if (!node || !self.notifyList[id]) return;
+                const msgDom = node.querySelector(".notify-message");
+                if (msgDom) {
+                    msgDom.textContent = newMessage;
+                }
+            },
+
+            /**
+             * 更新类型和图标
+             * @param {string} type - 类型: success, warning, error, info
+             */
+            setType: function (type) {
+                if (!node || !self.notifyList[id]) return;
+                // 移除旧类型
+                node.classList.remove("success", "warning", "error", "info");
+                node.classList.add(type);
+                // 更新图标 - 使用Font Awesome图标
+                const iconMap = {
+                    success: "fas fa-check-circle",
+                    warning: "fas fa-exclamation-triangle",
+                    error: "fas fa-times-circle",
+                    info: "fas fa-info-circle"
+                };
+                const iconDom = node.querySelector(".notify-icon i");
+                if (iconDom && iconMap[type]) {
+                    // 清除现有图标类名，添加新的Font Awesome类名
+                    iconDom.className = "";
+                    iconDom.classList.add("fa", ...iconMap[type].split(" "));
+                }
+            },
+
+            /**
+             * 完成操作，更新消息并开始 timeout 倒计时
+             * @param {string} completeMessage - 完成消息
+             * @param {number} timeout - 超时时间（毫秒），默认 3000
+             * @param {string} type - 完成后的类型，默认 "success"
+             * @param {string} shrinkMode - 收缩模式: "left", "center", "right"，默认使用全局配置
+             */
+            complete: function (completeMessage, timeout = 3000, type = "success", shrinkMode = null) {
+                if (!node || !self.notifyList[id]) return;
+
+                // 更新消息
+                this.setMessage(completeMessage);
+                // 更新类型
+                this.setType(type);
+
+                // 重新激活点击关闭事件
+                if (self.notifyList[id]) {
+                    self.notifyList[id].options.onClick = function (notify, event) {
+                        self.remove(notify.id);
+                    };
+                }
+
+                // 获取收缩模式（默认使用全局配置）
+                const mode = shrinkMode || self.Settings.progressMode || "center";
+
+                // 重新开始进度条动画（从满到空）
+                if (timeout > 0) {
+                    // 先禁用动画，设置初始状态
+                    node.style.setProperty("--notify-duration", "0ms");
+                    node.style.setProperty("--progress-transform-origin", mode);
+                    node.style.setProperty("--progress-scale", "1");
+                    node.offsetHeight; // force reflow
+
+                    // 启用动画，开始收缩
+                    node.style.setProperty("--notify-duration", timeout + "ms");
+                    node.offsetHeight; // force reflow
+                    node.style.setProperty("--progress-scale", "0");
+
+                    // 设置 timeout 后移除
+                    setTimeout(() => {
+                        self.remove(id);
+                    }, timeout);
+                }
+            },
+
+            /**
+             * 手动关闭通知
+             */
+            close: function () {
+                self.remove(id);
+            },
+
+            /**
+             * 检查通知是否仍然存在
+             * @returns {boolean}
+             */
+            isActive: function () {
+                return self.notifyList[id] && self.notifyList[id].status === "showing";
+            }
+        };
     }
 
     remove(id) {

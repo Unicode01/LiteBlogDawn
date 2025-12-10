@@ -71,5 +71,8 @@
     "google": "谷歌",
     "bing": "必应",
     "baidu": "百度",
-    "yahoo": "雅虎"
+    "yahoo": "雅虎",
+    "confirm-to-delete-card": "确认删除卡片？",
+    "delete-article-as-well": "同时删除文章？",
+    "confirm-to-delete-comment": "确认删除评论？"
 }

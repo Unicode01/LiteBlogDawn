@@ -1,5 +1,4 @@
 const template_new_post = `{{file:template_new_post}}`
-const template_new_post_direct = `{{file:template_new_post_direct}}`
 const index_edit_card_overlay = `
 <div class="edit-overlay">
 <div class="edit-overlay-button" id="show-card-button"><i class="fa fa-eye"></i></div>
@@ -104,7 +103,22 @@ function editCard(card) {
 
 function addInputBoxSelectEventListeners() {
     inputbox = document.querySelector(".card-input-box");
+    redirectTypeSelect = inputbox.querySelector("#add-card-redirect-type");
+    cardProxyGroups = document.querySelectorAll(".card-proxy-input-group");
     // add event listeners to select fields
+    inputbox.querySelector('#add-card-redirect-type').addEventListener('change', function () {
+        if (redirectTypeSelect.value == "proxy") {
+            // show proxy fields
+            cardProxyGroups.forEach(function (group) {
+                group.parentNode.style.display = "";
+            });
+        } else {
+            // hide proxy fields
+            cardProxyGroups.forEach(function (group) {
+                group.parentNode.style.display = "none";
+            });
+        }
+    });
     inputbox.querySelector('#add-card-template').addEventListener('change', function () {
         newSelection = this.value;
         switch (newSelection) {
@@ -112,18 +126,37 @@ function addInputBoxSelectEventListeners() {
                 // hide split line fields
                 inputbox.querySelector("#split-line-input-group").style.display = "none";
                 if (inputbox.getAttribute("mode") != "edit") {
-                    inputbox.querySelector("#classical-card-input-group").style.display = "";
+                    redirectTypeSelect.parentNode.style.display = "";
+                }
+                if (redirectTypeSelect.value == "proxy") {
+                    // show proxy fields
+                    cardProxyGroups.forEach(function (group) {
+                        group.parentNode.style.display = "";
+                    });
+                } else {
+                    // hide proxy fields
+                    cardProxyGroups.forEach(function (group) {
+                        group.parentNode.style.display = "none";
+                    });
                 }
                 break;
             case "card_template_split_line":
                 // show split line fields
                 inputbox.querySelector("#split-line-input-group").style.display = "";
-                inputbox.querySelector("#classical-card-input-group").style.display = "none";
+                redirectTypeSelect.parentNode.style.display = "none";
+                // hide proxy fields
+                cardProxyGroups.forEach(function (group) {
+                    group.parentNode.style.display = "none";
+                });
                 break;
             case "card_template_search_bar":
                 // hide all
                 inputbox.querySelector("#split-line-input-group").style.display = "none";
-                inputbox.querySelector("#classical-card-input-group").style.display = "none";
+                redirectTypeSelect.parentNode.style.display = "none";
+                // hide proxy fields
+                cardProxyGroups.forEach(function (group) {
+                    group.parentNode.style.display = "none";
+                });
                 break;
         }
     });
@@ -146,11 +179,25 @@ function addCard() {
 
 function deleteCard(card) {
     const cardId = card.getAttribute("card-id");
+    const cardInfoContainer = card.querySelector(".info-container");
+    const cardRedirectType = cardInfoContainer.getAttribute("data-redirect-type");
     console.log("deleteCard", cardId);
-    if (!confirm("Are you sure you want to delete this card?")) return;
+    if (!confirm(i18n.get_translation("confirm-to-delete-card", "Are you sure you want to delete this card?"))) return;
+    if (cardRedirectType == "direct") {
+        liteblogApis.deleteCard(cardId, success = function (data) {
+            console.log(data);
+            card.parentNode.removeChild(card);
+            window.Ntf.success("Card deleted.", {
+                i18n: "card-deleted",
+            });
+        }, error = function (data) {
+            console.log(data);
+        });
+        return;
+    }
     deleteArticle = false;
     if (card.classList.contains("card-classical")) {
-        deleteArticle = confirm("Do you want to delete the whole article as well?");
+        deleteArticle = confirm(i18n.get_translation("delete-article-as-well", "Do you want to delete the whole article as well?"));
     }
     if (deleteArticle) {
         // get card article id
@@ -176,7 +223,7 @@ function deleteCard(card) {
 }
 
 function deleteComment(commentId) {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
+    if (!confirm(i18n.get_translation("confirm-to-delete-comment", "Are you sure you want to delete this comment?"))) return;
     liteblogApis.deleteComment(window.location.pathname.split("/")[2], commentId, success = function (data) {
         console.log(data);
         const comment_container = document.querySelector("#article-comment[comment-id='" + commentId + "']");
@@ -237,38 +284,71 @@ function OnAddCardButtonClick() {
     const detailed_image = document.querySelector("#add-card-detailed-image").value == "" ? image : document.querySelector("#add-card-detailed-image").value;
     console.log(mode, title, description, link, image, template, order, detailed_title, detailed_description, detailed_image);
     if (mode == "add") {
-        // add new post
-        // build post
-        const new_post_html = buildArticle(redirect_type, detailed_title, detailed_description, detailed_image, link);
-        console.log(new_post_html);
-        // send request to server
         var article_id = "";
         if (template == 'card_template_classical') {
-            liteblogApis.addArticle({
-                title: detailed_title,
-                content_html: new_post_html,
-                author: "system",
-                content: "none",
-                extra_flags: {
-                    "language_code": "en",
-                    "article_description": detailed_description,
-                }
-            }, success = function (data) {
-                window.Ntf.success("Article created.", {
-                    i18n: "article-created",
-                });
-                console.log(data);
-                article_id = data.article_id;
+            if (redirect_type == "proxy") {
+                // add new post
+                // build post
+                const new_post_html = buildArticle(redirect_type, detailed_title, detailed_description, detailed_image, link);
+                console.log(new_post_html);
+                liteblogApis.addArticle({
+                    title: detailed_title,
+                    content_html: new_post_html,
+                    author: "system",
+                    content: "none",
+                    extra_flags: {
+                        "language_code": "en",
+                        "article_description": detailed_description,
+                    }
+                }, success = function (data) {
+                    window.Ntf.success("Article created.", {
+                        i18n: "article-created",
+                    });
+                    console.log(data);
+                    article_id = data.article_id;
 
-                // add new card
+                    // add new card
+                    liteblogApis.addCard({
+                        card_title: title,
+                        card_description: description,
+                        card_link: "/articles/" + article_id,
+                        card_image: image,
+                        icon: icon,
+                        order: String(order),
+                        template: template,
+                        redirect_type: redirect_type,
+                    }, success = function (data) {
+                        console.log(data);
+                        CancelInputBox();
+                        window.Ntf.add("Added Successfully!", {
+                            timeout: 3000,
+                            type: "success",
+                            onRemove: function () {
+                                window.location.reload();
+                            },
+                            i18n: "added-successfully",
+                        })
+                    }, error = function (data) {
+                        console.log(data);
+                        window.Ntf.error("Failed to add card.", {
+                            i18n: "failed-to-add-card",
+                        });
+                    })
+
+                }, error = function (data) {
+                    console.log(data);
+                    window.Ntf.error("Failed to create article.");
+                })
+            } else if (redirect_type == "direct") {
                 liteblogApis.addCard({
                     card_title: title,
                     card_description: description,
-                    card_link: "/articles/" + article_id,
+                    card_link: "/redirect.html?name=" + title + "&url=" + btoa(link),
                     card_image: image,
                     icon: icon,
                     order: String(order),
                     template: template,
+                    redirect_type: redirect_type,
                 }, success = function (data) {
                     console.log(data);
                     CancelInputBox();
@@ -286,17 +366,11 @@ function OnAddCardButtonClick() {
                         i18n: "failed-to-add-card",
                     });
                 })
+            }
 
-            }, error = function (data) {
-                console.log(data);
-                window.Ntf.error("Failed to create article.");
-            })
         } else if (template == 'card_template_split_line') {
             liteblogApis.addCard({
                 card_title: title,
-                card_description: description,
-                card_link: "/articles/" + article_id,
-                card_image: image,
                 icon: icon,
                 order: String(order),
                 template: template,
@@ -353,6 +427,7 @@ function OnAddCardButtonClick() {
             icon: icon,
             order: String(order),
             template: template,
+            redirect_type: redirect_type,
         }, success = function (data) {
             console.log(data);
             CancelInputBox();
@@ -384,15 +459,15 @@ function buildArticle(type, title, desc, img, link) {
             new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
             new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
             return new_post.outerHTML;
-        case "direct":
-            domparser = new DOMParser();
-            new_post = domparser.parseFromString(template_new_post_direct, "text/html").body.firstChild;
-            new_post.querySelector("#post-title") ? new_post.querySelector("#post-title").textContent = title : null;
-            new_post.querySelector("#post-description") ? new_post.querySelector("#post-description").textContent = desc : null;
-            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("src", img) : null;
-            new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
-            new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
-            return new_post.outerHTML;
+        // case "direct":
+        //     domparser = new DOMParser();
+        //     new_post = domparser.parseFromString(template_new_post_direct, "text/html").body.firstChild;
+        //     new_post.querySelector("#post-title") ? new_post.querySelector("#post-title").textContent = title : null;
+        //     new_post.querySelector("#post-description") ? new_post.querySelector("#post-description").textContent = desc : null;
+        //     new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("src", img) : null;
+        //     new_post.querySelector("#image-container-img") ? new_post.querySelector("#image-container-img").setAttribute("alt", title) : null;
+        //     new_post.querySelector(".data-container") ? new_post.querySelector(".data-container").setAttribute("data-link", link) : null;
+        //   return new_post.outerHTML;
         default:
             return "";
     }

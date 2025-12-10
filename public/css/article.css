@@ -60,6 +60,20 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: var(--base-gray-200);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 5px;
+    height: 5px;
+    background: var(--base-gray-500);
+    border-radius: 5px;
+}
+
 html,
 body {
     width: 100%;

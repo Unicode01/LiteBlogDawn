@@ -10,6 +10,7 @@ class i18n {
             .then(response => response.json())
             .then(data => {
                 this.translations = data
+                window.i18n = this
                 this.trans_all()
                 this.setupMutationObserver()
             })
@@ -59,7 +60,10 @@ class i18n {
         element.querySelectorAll('*').forEach(child => this.translateElement(child));
     }
 
-    get_translation(key) {
+    get_translation(key, defaultv) {
+        if (!this.translations[key]) {
+            return defaultv
+        }
         return this.translations[key]
     }
 }

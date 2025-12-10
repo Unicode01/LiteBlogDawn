@@ -359,10 +359,26 @@ function get_last_search() {
 }
 
 function pop_search_history() {
+    // const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    const searchHistoryContainer = document.querySelector('#search-history-container');
+    // searchHistoryContainer.style.display = '';
+    // delete last search from history
+    reset_search_bar_items();
+    // get actual height of container
+    searchHistoryContainer.style.display = '';
+    searchHistoryContainer.style.height = 'auto';
+    searchHistoryContainer.offsetHeight; // force reflow
+    let containerHeight = searchHistoryContainer.offsetHeight;
+    // show container
+    searchHistoryContainer.style.display = '';
+    searchHistoryContainer.style.height = '0px';
+    searchHistoryContainer.offsetHeight; // force reflow
+    searchHistoryContainer.style.height = containerHeight + 'px';
+}
+
+function reset_search_bar_items() {
     const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
     const searchHistoryContainer = document.querySelector('#search-history-container');
-    searchHistoryContainer.style.display = '';
-    // delete last search from history
     searchHistoryContainer.innerHTML = '';
     if (searchHistory.length === 0) {
         searchHistoryContainer.style.display = 'none';
@@ -408,6 +424,17 @@ function pop_search_history() {
             localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
             // remove item from container
             searchHistoryContainer.removeChild(e.target.closest('.search-history-item'));
+            // check if container is empty
+            if (searchHistoryContainer.children.length === 0) {
+                searchHistoryContainer.style.display = 'none';
+                return;
+            }
+            // get new height after removing item
+            searchHistoryContainer.style.height = 'auto';
+            searchHistoryContainer.offsetHeight; // force reflow
+            let containerHeight = searchHistoryContainer.offsetHeight;
+            // set new height
+            searchHistoryContainer.style.height = containerHeight + 'px';
         });
 
         // add history item to container

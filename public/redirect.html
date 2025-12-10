@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+    <script>
+        search = window.location.search;
+        console.log(search)
+        // parse search
+        params = new URLSearchParams(search);
+        name = params.get("name");
+        urlB64 = params.get("url");
+        url = atob(urlB64);
+        console.log(name, url);
+        if (!url) {
+            document.body.innerHTML = "Invalid URL";
+        }
+        // fill doms
+        document.title = "Redirecting to "+ name + "...";
+        window.location.href = url;
+        // document.body.innerHTML = templateBody.replace("{name}", name).replace("{url}", url);
+    </script>
+</body>
+</html>
