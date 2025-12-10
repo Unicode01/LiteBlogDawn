@@ -363,7 +363,9 @@ function pop_search_history() {
     const searchHistoryContainer = document.querySelector('#search-history-container');
     // searchHistoryContainer.style.display = '';
     // delete last search from history
-    reset_search_bar_items();
+    if (reset_search_bar_items() == "none") {
+        return;
+    }
     // get actual height of container
     searchHistoryContainer.style.display = '';
     searchHistoryContainer.style.height = 'auto';
@@ -382,7 +384,7 @@ function reset_search_bar_items() {
     searchHistoryContainer.innerHTML = '';
     if (searchHistory.length === 0) {
         searchHistoryContainer.style.display = 'none';
-        return;
+        return "none";
     }
     // add history items
     searchHistory.forEach(function (item) {

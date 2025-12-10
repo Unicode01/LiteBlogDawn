@@ -30,12 +30,13 @@
             </div>
         </div>
         <div class="top-btn-bar">
-            
+
             <button class="topbar-btn expand-btn" id="theme-btn" aria-label="Toggle theme">
                 <i class="fas fa-adjust"></i>
             </button>
 
-            <button class="topbar-btn expand-btn" id="rss-btn" onclick="window.location.href='/feed/rss.xml'" aria-label="RSS feed">
+            <button class="topbar-btn expand-btn" id="rss-btn" onclick="window.location.href='/feed/rss.xml'"
+                aria-label="RSS feed">
                 <i class="fas fa-rss"></i>
             </button>
 
@@ -57,57 +58,60 @@
     <aside class="index-sidebar">
         <ul class="sidebar-menu">
             <!-- Menu Items here -->
-            <li onclick="window.location.href='/'"><a href="#"><i class="fas fa-home"></i> <span
-                        class="menu-text" data-i18n="home">Home</span></a></li>
+            <li onclick="window.location.href='/'"><a href="#"><i class="fas fa-home"></i> <span class="menu-text"
+                        data-i18n="home">Home</span></a></li>
         </ul>
     </aside>
 
     <main class="index-content">
         <!-- Content here -->
-        <div class="main-content-container">
-            <div class="article-content-container">
-                {{article_content}}
-            </div>
+        <div class="scroll-container">
+            <div class="main-content-container">
+                <div class="article-content-container">
+                    {{article_content}}
+                </div>
 
-            <div class="article-footer">
-                {{comments}}
-            </div>
+                <div class="article-footer">
+                    {{comments}}
+                </div>
 
-            <div class="new-comment-container">
-                <div class="new-comment-author-container">
-                    <div class="input-group">
-                        <label for="new-comment-author-name" data-i18n="name:">Name:</label>
-                        <input id="new-comment-author-name" class="author-input" type="text" placeholder="Your name"
-                            aria-label="Your name">
+                <div class="new-comment-container">
+                    <div class="new-comment-author-container">
+                        <div class="input-group">
+                            <label for="new-comment-author-name" data-i18n="name:">Name:</label>
+                            <input id="new-comment-author-name" class="author-input" type="text" placeholder="Your name"
+                                aria-label="Your name">
+                        </div>
+                        <div class="input-group">
+                            <label for="new-comment-author-email" data-i18n="email:">Email:</label>
+                            <input id="new-comment-author-email" class="author-input" type="email"
+                                placeholder="your.email@example.com" aria-label="Your email"
+                                title="won't show on the website">
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="new-comment-author-email" data-i18n="email:">Email:</label>
-                        <input id="new-comment-author-email" class="author-input" type="email"
-                            placeholder="your.email@example.com" aria-label="Your email"
-                            title="won't show on the website">
+
+                    <div class="comment-content-container">
+                        <textarea id="new-comment-content" class="comment-content" placeholder="Share your thoughts..."
+                            aria-label="Your comment"></textarea>
+                    </div>
+
+                    <div id="new-comment-verify-container" class="comment-verify"></div>
+
+                    <div class="submit-container">
+                        <button id="new-comment-submit-reply" class="button submit-btn" id="reply-comment-btn"
+                            style="display: none;" data-i18n="reply-comment">
+                            Reply Comment
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button id="new-comment-submit" class="button submit-btn" id="post-comment-btn"
+                            data-i18n="post-comment">
+                            Post Comment
+                            <i class="fas fa-reply"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="comment-content-container">
-                    <textarea id="new-comment-content" class="comment-content" placeholder="Share your thoughts..."
-                        aria-label="Your comment"></textarea>
-                </div>
-
-                <div id="new-comment-verify-container" class="comment-verify"></div>
-
-                <div class="submit-container">
-                    <button id="new-comment-submit-reply" class="button submit-btn" id="reply-comment-btn"
-                        style="display: none;" data-i18n="reply-comment">
-                        Reply Comment
-                        <i class="fas fa-reply"></i>
-                    </button>
-                    <button id="new-comment-submit" class="button submit-btn" id="post-comment-btn" data-i18n="post-comment">
-                        Post Comment
-                        <i class="fas fa-reply"></i>
-                    </button>
-                </div>
             </div>
-
         </div>
 
         <div id="bottom-bar" class="bottom-bar">

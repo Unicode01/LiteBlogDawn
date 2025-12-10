@@ -281,10 +281,18 @@ body {
     min-width: 280px;
     display: flex;
     align-content: flex-start;
-    overflow: auto;
+    /* overflow: auto; */
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+.scroll-container {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 /* Responsive Design */
@@ -305,10 +313,15 @@ body {
 
     .index-content {
         margin-left: 0;
+        padding: 10px;
     }
 
     .index-sidebar.expanded~.index-content {
         margin-left: 0;
+    }
+
+    .scroll-container {
+        overflow: visible auto;
     }
 }
 

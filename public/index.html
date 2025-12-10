@@ -35,7 +35,7 @@
             </button>
 
             <button class="topbar-btn expand-btn" id="rss-btn" onclick="window.location.href='/feed/rss.xml'"
-                    aria-label="RSS feed">
+                aria-label="RSS feed">
                 <i class="fas fa-rss"></i>
             </button>
 
@@ -64,8 +64,10 @@
 
     <main class="index-content">
         <!-- Content here -->
-        <div class="main-content-container">
-            {{rendered:cards}}
+        <div class="scroll-container">
+            <div class="main-content-container">
+                {{rendered:cards}}
+            </div>
         </div>
 
         <div id="bottom-bar" class="bottom-bar">
